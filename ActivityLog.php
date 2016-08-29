@@ -3,6 +3,7 @@
 namespace samkoch\activitylog;
 
 use Yii;
+use yii\base\Exception;
 use yii\db\ActiveRecord;
 
 /**
@@ -36,10 +37,22 @@ class ActivityLog extends ActiveRecord
         return 'activity_log';
     }
 
-    public static function log($category, $message = '', $modelName = '', $recordId = '', $params = '')
+    public static function log($category, $message = null, $modelName = null, $recordId = null, $params = null)
     {
-        $log = new self();
+        if(is_object($modelName)) {
+            //try to get record id from object
+            if(!$recordId) {
+                try {
+                    $recordId = $modelName->id;
+                }
+                catch (Exception $e) {}
+            }
 
+            //convert object to class name
+            $modelName = get_class($modelName);
+        }
+
+        $log = new self();
         $log->tstamp = time();
 
         if (PHP_SAPI !== 'cli') {

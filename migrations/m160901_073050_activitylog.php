@@ -1,5 +1,7 @@
 <?php
 
+namespace samkoch\yii2activitylog\migrations;
+
 use yii\db\Migration;
 use samkoch\activitylog\ActivityLog;
 
